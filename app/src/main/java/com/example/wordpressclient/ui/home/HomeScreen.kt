@@ -2,6 +2,7 @@ package com.example.wordpressclient.ui.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
+import com.example.wordpressclient.data.sampleArticles
+import com.example.wordpressclient.data.Article
 
 @Composable
 fun HomeScreen() {
@@ -32,14 +35,15 @@ fun HomeScreen() {
             SectionHeader("Breaking News")
         }
 
-        // Featured Section (big card)
+        // Featured Article (lấy bài đầu tiên trong sampleArticles)
         item {
+            val featured = sampleArticles.first()
             FeaturedCard(
-                title = "New VR Headsets That Will Shape the Metaverse",
-                author = "Mason Eduard",
-                date = "Jan 3, 2022",
-                views = "3344 views",
-                imageUrl = "https://picsum.photos/600/400" // demo ảnh
+                title = featured.title,
+                author = featured.author,
+                date = featured.date,
+                views = featured.views,
+                imageUrl = featured.imageUrl
             )
         }
 
@@ -48,13 +52,13 @@ fun HomeScreen() {
             SectionHeader("Recommendation")
         }
 
-        items(5) { index ->
+        // Suggested articles (các bài còn lại)
+        items(sampleArticles.drop(1)) { article ->
             SuggestedItem(
-                title = "Suggested article #$index",
-                author = "Author $index",
-                date = "Jan ${index + 1}, 2022",
-                views = "${1000 * (index + 1)} views",
-                imageUrl = "https://picsum.photos/300/200?random=$index"
+                title = article.title,
+                date = article.date,
+                views = article.views,
+                imageUrl = article.imageUrl
             )
         }
     }
@@ -94,12 +98,12 @@ fun TopBar(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search",
-                    modifier = Modifier.size(20.dp) // giữ icon nhỏ để không đẩy text xuống
+                    modifier = Modifier.size(20.dp)
                 )
             },
             modifier = Modifier
                 .weight(1f)
-                .height(56.dp), // 56.dp là chiều cao tiêu chuẩn tránh cắt chữ
+                .height(56.dp),
             shape = RoundedCornerShape(24.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xFFF5F5F5),
