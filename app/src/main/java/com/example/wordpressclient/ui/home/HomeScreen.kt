@@ -16,43 +16,53 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
 import com.example.wordpressclient.data.sampleArticles
-import com.example.wordpressclient.data.Article
 
 @Composable
 fun HomeScreen() {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            bottom = 16.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         // Search + Notification
         item {
-            TopBar()
+            TopBar(
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
 
         // Breaking News Section title
         item {
-            SectionHeader("Breaking News")
+            SectionHeader(
+                title = "Breaking News",
+                onViewAllClick = { /* TODO: xử lý click View all Breaking News */ }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
         }
 
-        // Featured Article (lấy bài đầu tiên trong sampleArticles)
+        // Featured Article
         item {
             val featured = sampleArticles.first()
             FeaturedCard(
                 title = featured.title,
                 author = featured.author,
-                date = featured.date,
-                views = featured.views,
                 imageUrl = featured.imageUrl
             )
         }
 
         // Recommendation Section title
         item {
-            SectionHeader("Recommendation")
+            SectionHeader(
+                title = "Recommendation",
+                onViewAllClick = { /* TODO: xử lý click View all Recommendation */ }
+            )
         }
 
-        // Suggested articles (các bài còn lại)
+        // Suggested articles (giữ nguyên)
         items(sampleArticles.drop(1)) { article ->
             SuggestedItem(
                 title = article.title,
@@ -65,24 +75,43 @@ fun HomeScreen() {
 }
 
 @Composable
-fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium.copy(
-            fontWeight = FontWeight.Bold
-        ),
-        fontSize = 22.sp,
-        modifier = Modifier.fillMaxWidth()
-    )
+fun SectionHeader(
+    title: String,
+    onViewAllClick: () -> Unit = {},
+    viewAllColor: Color = Color(0xFF1E88E5) // mặc định xanh dương
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            fontSize = 22.sp
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextButton(onClick = onViewAllClick) {
+            Text(
+                text = "View all",
+                fontSize = 14.sp,
+                color = viewAllColor
+            )
+        }
+    }
 }
 
 @Composable
 fun TopBar(
     query: String = "",
-    onQueryChanged: (String) -> Unit = {}
+    onQueryChanged: (String) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically

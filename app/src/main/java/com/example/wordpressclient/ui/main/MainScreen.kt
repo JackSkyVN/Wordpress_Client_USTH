@@ -22,7 +22,7 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { HomeScreen() }   // 👈 thay DummyScreen
+            composable(BottomNavItem.Home.route) { HomeScreen() }
             composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
             composable(BottomNavItem.Notifications.route) { DummyScreen("Notifications Screen") }
             composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }

@@ -1,13 +1,16 @@
 package com.example.wordpressclient.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -19,66 +22,60 @@ import coil.compose.rememberAsyncImagePainter
 fun FeaturedCard(
     title: String,
     author: String,
-    date: String,
-    views: String,
     imageUrl: String
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp) // tạo khoảng cách với divider
+            .height(240.dp) // height of image
+            .clip(RoundedCornerShape(16.dp))
     ) {
-        // Ảnh bo góc
+        // Ảnh nền
         Image(
             painter = rememberAsyncImagePainter(imageUrl),
             contentDescription = title,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+
+        // Gradient mờ từ dưới lên để chữ dễ đọc
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Crop
+                .matchParentSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black.copy(alpha = 0.7f)
+                        ),
+                        startY = 100f
+                    )
+                )
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Tiêu đề
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.Black
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Dòng Author + Date + Views
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+        // Text đè lên ảnh
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp)
         ) {
             Text(
-                text = "By: $author",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color(0xFF1565C0),
-                    fontWeight = FontWeight.Medium
+                text = title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White
                 )
             )
-            Spacer(modifier = Modifier.weight(1f))
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
-                text = "$date  •  $views",
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                text = "By $author",
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.White.copy(alpha = 0.9f)
+                )
             )
         }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        // Đường kẻ ngang
-        Divider(
-            color = Color.Gray.copy(alpha = 0.4f), // giống màu date/views
-            thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth(1.2f) // chỉ dài bằng nội dung, không full màn hình
-        )
     }
 }
