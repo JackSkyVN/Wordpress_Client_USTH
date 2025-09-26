@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordpressclient.ui.home.HomeScreen
 import com.example.wordpressclient.ui.notification.Alert
 
 
@@ -23,7 +24,7 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { DummyScreen("Home Screen") }
+            composable(BottomNavItem.Home.route) {HomeScreen()}
             composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
             composable( route = BottomNavItem.Notifications.route) {Alert()}
             composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }
