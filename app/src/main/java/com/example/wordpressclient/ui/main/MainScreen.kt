@@ -9,6 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.wordpressclient.ui.home.HomeScreen
 import androidx.compose.ui.unit.dp
+import com.example.wordpressclient.ui.article.ArticleScreen
+import com.example.wordpressclient.data.Article
+import com.example.wordpressclient.ui.notification.Alert
 
 @Composable
 fun MainScreen() {
@@ -22,10 +25,26 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { HomeScreen() }
+            // Home
+            composable(BottomNavItem.Home.route) {
+                HomeScreen(navController) // 👈 truyền navController
+            }
+
+            // Các màn khác
             composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
-            composable(BottomNavItem.Notifications.route) { DummyScreen("Notifications Screen") }
+            composable(BottomNavItem.Notifications.route) {Alert()}
             composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }
+
+            // 👇 Route cho ArticleScreen
+            composable("article") {
+                val article = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Article>("article")
+
+                article?.let {
+                    ArticleScreen(navController, it)
+                }
+            }
         }
     }
 }
