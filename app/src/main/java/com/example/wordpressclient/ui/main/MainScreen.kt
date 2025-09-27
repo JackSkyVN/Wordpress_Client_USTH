@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun MainScreen() {
+fun MainScreen(onLogoutClick: () -> Unit) {
     val navController = rememberNavController()
 
     Scaffold(
