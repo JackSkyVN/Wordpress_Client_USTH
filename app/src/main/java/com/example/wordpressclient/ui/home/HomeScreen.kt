@@ -15,10 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
+import androidx.navigation.NavController
 import com.example.wordpressclient.data.sampleArticles
+import com.example.wordpressclient.data.Article
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -39,12 +41,12 @@ fun HomeScreen() {
         item {
             SectionHeader(
                 title = "Breaking News",
-                onViewAllClick = { /* TODO: xử lý click View all Breaking News */ }
+                onViewAllClick = { }
             )
             Spacer(modifier = Modifier.height(4.dp))
         }
 
-        // Featured Article
+        // Featured Article (bạn có thể thêm onClick giống SuggestedItem nếu muốn)
         item {
             val featured = sampleArticles.first()
             FeaturedCard(
@@ -58,17 +60,22 @@ fun HomeScreen() {
         item {
             SectionHeader(
                 title = "Recommendation",
-                onViewAllClick = { /* TODO: xử lý click View all Recommendation */ }
+                onViewAllClick = { }
             )
         }
 
-        // Suggested articles (giữ nguyên)
-        items(sampleArticles.drop(1)) { article ->
+        // Suggested articles list
+        items(sampleArticles.drop(1)) { article: Article ->
             SuggestedItem(
                 title = article.title,
                 date = article.date,
                 views = article.views,
-                imageUrl = article.imageUrl
+                imageUrl = article.imageUrl,
+                onClick = {
+                    // 👇 Lưu Article vào SavedStateHandle rồi điều hướng sang ArticleScreen
+                    navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+                    navController.navigate("article")
+                }
             )
         }
     }
@@ -78,7 +85,7 @@ fun HomeScreen() {
 fun SectionHeader(
     title: String,
     onViewAllClick: () -> Unit = {},
-    viewAllColor: Color = Color(0xFF1E88E5) // mặc định xanh dương
+    viewAllColor: Color = Color(0xFF1E88E5)
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
