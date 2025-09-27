@@ -14,7 +14,7 @@ import com.example.wordpressclient.data.Article
 import com.example.wordpressclient.ui.notification.Alert
 
 @Composable
-fun MainScreen() {
+fun MainScreen(onLogoutClick: () -> Unit) {
     val navController = rememberNavController()
 
     Scaffold(
