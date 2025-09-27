@@ -5,5 +5,6 @@ data class NotificationItem(
     val action: String,    // hành động (liked, commented, followed)
     val target: String,    // đối tượng (your post, your article…)
     val time: String,      // thời gian
-    val avatar: Int        // resource id ảnh đại diện
+    val avatar: Int,        // resource id ảnh đại diện
+    val thumbnail: Int
 )
