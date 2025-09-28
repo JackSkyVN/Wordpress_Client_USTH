@@ -8,6 +8,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordpressclient.ui.profile.EditProfileScreen
+import com.example.wordpressclient.ui.profile.MyProfileScreen
 
 @Composable
 fun MainScreen() {
@@ -24,7 +26,20 @@ fun MainScreen() {
             composable(BottomNavItem.Home.route) { DummyScreen("Home Screen") }
             composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
             composable(BottomNavItem.Notifications.route) { DummyScreen("Notifications Screen") }
-            composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }
+            composable(route = BottomNavItem.Profile.route) {
+                MyProfileScreen(
+                    onEditClick = {
+                        navController.navigate("edit_profile")
+                    }
+                )
+            }
+            composable("edit_profile") {
+                EditProfileScreen(
+                    onBack = { navController.popBackStack() },
+                    onSave = { navController.popBackStack() }
+                )
+            }
+
         }
     }
 }
