@@ -10,10 +10,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import com.example.wordpressclient.R
+
+
 
 @Composable
 fun LoginScreen(
@@ -109,21 +114,46 @@ fun LoginScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("or", modifier = Modifier.align(Alignment.CenterHorizontally))
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedButton(onClick = onGoogleClick, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = { /* TODO: Google Sign In */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_google),
+                contentDescription = "Google logo",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
             Text("Continue with Google")
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(onClick = onAppleClick, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = { /* TODO: Apple Sign In */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_apple),
+                contentDescription = "Apple logo",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
             Text("Continue with Apple")
         }
+
+        OutlinedButton(
+            onClick = { /* TODO: Facebook Sign In */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_facebook),
+                contentDescription = "Facebook logo",
+                tint = Color.Unspecified, // giữ màu xanh Facebook
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Continue with Facebook")
+        }
+
 
         Spacer(modifier = Modifier.height(12.dp))
 
