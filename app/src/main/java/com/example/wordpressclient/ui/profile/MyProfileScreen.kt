@@ -18,49 +18,57 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wordpressclient.R
 
+// ✅ dữ liệu người dùng
+data class ProfileState(
+    var name: String = "Charlotte King",
+    var email: String = "johnkinggraphics@gmail.com",
+    var username: String = "@johnkinggraphics",
+    var password: String = "123456",
+    var phone: String = "6989532"
+)
+
 @Composable
 fun MyProfileScreen(
+    profile: ProfileState,
     onEditClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Avatar + Info
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "Profile",
-                modifier = Modifier
-                    .size(90.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Charlotte King", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text("@johnkinggraphics", color = Color.Gray, fontSize = 14.sp)
+        // Avatar
+        Image(
+            painter = painterResource(id = R.drawable.avatar), // ảnh trong drawable
+            contentDescription = "Profile",
+            modifier = Modifier
+                .size(90.dp)
+                .clip(CircleShape)
+        )
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            // Nút Edit Profile màu cam nhạt
-            Text(
-                text = "Edit Profile",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xFFFFA726)) // Cam nhạt
-                    .clickable { onEditClick() }
-                    .padding(horizontal = 24.dp, vertical = 8.dp)
-            )
-        }
+        // Tên + username
+        Text(profile.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(profile.username, color = Color.Gray, fontSize = 14.sp)
 
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Nút Edit Profile
+        Text(
+            text = "Edit Profile",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .background(Color(0xFFFFA726)) // cam nhạt
+                .clickable { onEditClick() }
+                .padding(horizontal = 24.dp, vertical = 8.dp)
+        )
+
+        // Danh sách menu
         Spacer(modifier = Modifier.height(24.dp))
-
-        // Menu
         ProfileMenuItem("Favourites")
         ProfileMenuItem("Downloads")
         ProfileMenuItem("Language")
