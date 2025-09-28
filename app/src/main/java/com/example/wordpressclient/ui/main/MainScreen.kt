@@ -8,27 +8,43 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordpressclient.ui.home.HomeScreen
+import com.example.wordpressclient.ui.notification.Alert
+import com.example.wordpressclient.ui.profile.EditProfileScreen
+import com.example.wordpressclient.ui.profile.MyProfileScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(onLogoutClick: () -> Unit) {
     val navController = rememberNavController()
-
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { BottomNavigationBar(navController = navController) } // Pass navController here
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
+        NavHost(navController = navController,
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { DummyScreen("Home Screen") }
-            composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
-            composable(BottomNavItem.Notifications.route) { DummyScreen("Notifications Screen") }
-            composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }
+            composable(BottomNavItem.Home.route) {
+                HomeScreen(navController)
+            }
+            composable(BottomNavItem.Discover.route) {DummyScreen("Discover Screen") }
+            composable(BottomNavItem.Notifications.route) {Alert()}
+            composable(route = BottomNavItem.Profile.route) {
+                MyProfileScreen(
+                    onEditClick = {
+                        navController.navigate("edit_profile")
+                    }
+                )
+            }
+            composable("edit_profile") {
+                EditProfileScreen(
+                    onBack = { navController.popBackStack() },
+                    onSave = { navController.popBackStack() }
+
+                )
+            }
         }
     }
 }
-
 @Composable
 fun DummyScreen(name: String) {
     androidx.compose.material3.Text(text = name, modifier = Modifier.padding(24.dp))

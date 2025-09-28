@@ -3,7 +3,6 @@ package com.example.wordpressclient
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -61,6 +60,7 @@ fun AppNavigation() {
                         // we could also pass back an error callback but simpler: LoginScreen handles error states locally
                     }
                 },
+
                 onSignUpClick = { navController.navigate(Screen.Register.route) },
                 onGoogleClick = { /* TODO */ },
                 onAppleClick = { /* TODO */ },

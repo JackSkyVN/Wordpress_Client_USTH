@@ -33,7 +33,7 @@ fun MyProfileScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.avatar),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = "Profile",
                 modifier = Modifier
                     .size(90.dp)
