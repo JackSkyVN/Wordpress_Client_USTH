@@ -1,4 +1,4 @@
-package com.example.wordpressclient.ui.main.search
+package com.example.wordpressclient.ui.discover
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -128,6 +128,7 @@ fun FilterBox(text: String, modifier: Modifier = Modifier) {
 
 // =============== FILTER SUGGESTIONS (chips) ===============
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 fun FilterSuggestions() {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordpressclient.ui.discover.Discover
 
 @Composable
 fun MainScreen() {
@@ -21,16 +21,23 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { DummyScreen("Home Screen") }
-            composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
-            composable(BottomNavItem.Notifications.route) { DummyScreen("Notifications Screen") }
-            composable(BottomNavItem.Profile.route) { DummyScreen("Profile Screen") }
+            composable(route = BottomNavItem.Home.route) {
+                DummyScreen(name = "Home Screen")
+            }
+            composable(route = BottomNavItem.Discover.route) {
+                Discover()
+            }
+            composable(route = BottomNavItem.Notifications.route) {
+                DummyScreen(name = "Notifications Screen")
+            }
+            composable(route = BottomNavItem.Profile.route) {
+                DummyScreen(name = "Profile Screen")
+            }
         }
     }
 }
 
 @Composable
 fun DummyScreen(name: String) {
-    androidx.compose.material3.Text(text = name, modifier = Modifier.padding(24.dp))
+    androidx.compose.material3.Text(text = name)
 }
-
