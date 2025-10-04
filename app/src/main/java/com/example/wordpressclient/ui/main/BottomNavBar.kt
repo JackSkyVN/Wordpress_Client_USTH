@@ -30,7 +30,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = selected,
                 onClick = {
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        //Always bring to home
+                        popUpTo(0) { inclusive = false }
                         launchSingleTop = true
                         restoreState = true
                     }

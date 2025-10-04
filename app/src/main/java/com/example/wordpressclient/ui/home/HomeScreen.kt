@@ -46,13 +46,19 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(4.dp))
         }
 
-        // Featured Article (bạn có thể thêm onClick giống SuggestedItem nếu muốn)
+        // Featured Article
         item {
             val featured = sampleArticles.first()
             FeaturedCard(
                 title = featured.title,
                 author = featured.author,
-                imageUrl = featured.imageUrl
+                imageUrl = featured.imageUrl,
+                topic = featured.topic,
+                onClick = {
+                    // 👇 Lưu Article vào SavedStateHandle rồi điều hướng sang ArticleScreen
+                    navController.currentBackStackEntry?.savedStateHandle?.set("article", featured)
+                    navController.navigate("article")
+                }
             )
         }
 
@@ -71,8 +77,8 @@ fun HomeScreen(navController: NavController) {
                 date = article.date,
                 views = article.views,
                 imageUrl = article.imageUrl,
+                topic = article.topic,
                 onClick = {
-                    // 👇 Lưu Article vào SavedStateHandle rồi điều hướng sang ArticleScreen
                     navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
                     navController.navigate("article")
                 }
@@ -85,7 +91,7 @@ fun HomeScreen(navController: NavController) {
 fun SectionHeader(
     title: String,
     onViewAllClick: () -> Unit = {},
-    viewAllColor: Color = Color(0xFF1E88E5)
+    viewAllColor: Color = Color(0xFFFFA726)
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
