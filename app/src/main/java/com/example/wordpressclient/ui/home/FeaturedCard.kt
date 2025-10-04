@@ -2,6 +2,7 @@ package com.example.wordpressclient.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -22,13 +23,15 @@ import coil.compose.rememberAsyncImagePainter
 fun FeaturedCard(
     title: String,
     author: String,
-    imageUrl: String
+    imageUrl: String,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(240.dp) // height of image
             .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() }
     ) {
         // Ảnh nền
         Image(

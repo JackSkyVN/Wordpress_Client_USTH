@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
@@ -15,12 +15,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Refresh
 import androidx.navigation.NavController
-import com.example.wordpressclient.data.sampleArticles
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wordpressclient.data.Article
+import com.example.wordpressclient.viewmodel.WordPressViewModel
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val viewModel: WordPressViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
+    
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -33,8 +38,52 @@ fun HomeScreen(navController: NavController) {
         // Search + Notification
         item {
             TopBar(
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp),
+                onRefreshClick = { viewModel.refreshPosts() }
             )
+        }
+
+        // Loading state
+        if (uiState.isLoading) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+
+        // Error state
+        if (uiState.error != null) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Error loading posts",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color(0xFFD32F2F)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = uiState.error ?: "Unknown error",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFD32F2F)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = { viewModel.refreshPosts() }) {
+                            Text("Retry")
+                        }
+                    }
+                }
+            }
         }
 
         // Breaking News Section title
@@ -46,14 +95,19 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(4.dp))
         }
 
-        // Featured Article (bạn có thể thêm onClick giống SuggestedItem nếu muốn)
-        item {
-            val featured = sampleArticles.first()
-            FeaturedCard(
-                title = featured.title,
-                author = featured.author,
-                imageUrl = featured.imageUrl
-            )
+        // Featured Article
+        uiState.featuredPost?.let { featured ->
+            item {
+                FeaturedCard(
+                    title = featured.title,
+                    author = featured.author,
+                    imageUrl = featured.imageUrl,
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("article", featured)
+                        navController.navigate("article")
+                    }
+                )
+            }
         }
 
         // Recommendation Section title
@@ -65,14 +119,13 @@ fun HomeScreen(navController: NavController) {
         }
 
         // Suggested articles list
-        items(sampleArticles.drop(1)) { article: Article ->
+        items(uiState.posts.drop(1)) { article: Article ->
             SuggestedItem(
                 title = article.title,
                 date = article.date,
                 views = article.views,
                 imageUrl = article.imageUrl,
                 onClick = {
-                    // 👇 Lưu Article vào SavedStateHandle rồi điều hướng sang ArticleScreen
                     navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
                     navController.navigate("article")
                 }
@@ -115,6 +168,7 @@ fun SectionHeader(
 fun TopBar(
     query: String = "",
     onQueryChanged: (String) -> Unit = {},
+    onRefreshClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -151,6 +205,13 @@ fun TopBar(
         )
 
         Spacer(modifier = Modifier.width(8.dp))
+
+        IconButton(onClick = onRefreshClick) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Refresh"
+            )
+        }
 
         BadgedBox(
             badge = {

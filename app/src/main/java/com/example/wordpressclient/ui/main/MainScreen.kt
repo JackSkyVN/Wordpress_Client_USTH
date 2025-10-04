@@ -12,22 +12,25 @@ import com.example.wordpressclient.ui.home.HomeScreen
 import com.example.wordpressclient.ui.notification.Alert
 import com.example.wordpressclient.ui.profile.EditProfileScreen
 import com.example.wordpressclient.ui.profile.MyProfileScreen
+import com.example.wordpressclient.ui.article.ArticleScreen
+import com.example.wordpressclient.data.Article
 
 @Composable
 fun MainScreen(onLogoutClick: () -> Unit) {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) } // Pass navController here
+        bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
-        NavHost(navController = navController,
+        NavHost(
+            navController = navController,
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomNavItem.Home.route) {
                 HomeScreen(navController)
             }
-            composable(BottomNavItem.Discover.route) {DummyScreen("Discover Screen") }
-            composable(BottomNavItem.Notifications.route) {Alert()}
+            composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
+            composable(BottomNavItem.Notifications.route) { Alert() }
             composable(route = BottomNavItem.Profile.route) {
                 MyProfileScreen(
                     onEditClick = {
@@ -39,14 +42,22 @@ fun MainScreen(onLogoutClick: () -> Unit) {
                 EditProfileScreen(
                     onBack = { navController.popBackStack() },
                     onSave = { navController.popBackStack() }
-
                 )
+            }
+            composable("article") {
+                val article = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Article>("article")
+
+                article?.let {
+                    ArticleScreen(navController, it)
+                }
             }
         }
     }
 }
+
 @Composable
 fun DummyScreen(name: String) {
     androidx.compose.material3.Text(text = name, modifier = Modifier.padding(24.dp))
 }
-
