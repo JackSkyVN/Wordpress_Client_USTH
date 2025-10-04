@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
@@ -22,6 +23,7 @@ fun SuggestedItem(
     date: String,
     views: String,
     imageUrl: String,
+    topic: String,
     onClick: () -> Unit
 ) {
     Row(
@@ -30,14 +32,15 @@ fun SuggestedItem(
             .height(100.dp)
             .padding(vertical = 4.dp)
     ) {
-        // Ảnh bo góc
+        // Ảnh bo góc + bấm được
         Image(
             painter = rememberAsyncImagePainter(imageUrl),
             contentDescription = title,
             modifier = Modifier
                 .width(100.dp)
                 .fillMaxHeight()
-                .clip(RoundedCornerShape(8.dp)),
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onClick() },
             contentScale = ContentScale.Crop
         )
 
@@ -48,11 +51,33 @@ fun SuggestedItem(
                 .fillMaxHeight()
                 .weight(1f)
         ) {
-            // Date + Views
-            Text(
-                text = "$date  •  $views",
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-            )
+            // Topic + Date + Views
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // 👇 Topic chip
+                Surface(
+                    shape = RoundedCornerShape(50), // bo tròn
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) // nền nhạt
+                ) {
+                    Text(
+                        text = topic,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+
+                // Date + Views
+                Text(
+                    text = "$date  •  $views",
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                )
+            }
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -64,7 +89,7 @@ fun SuggestedItem(
                 color = Color.Black,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.clickable { onClick() } // 👈 Bấm để chuyển ArticleScreen
+                modifier = Modifier.clickable { onClick() }
             )
         }
     }

@@ -102,6 +102,7 @@ fun HomeScreen(navController: NavController) {
                     title = featured.title,
                     author = featured.author,
                     imageUrl = featured.imageUrl,
+                    topic = featured.topic,
                     onClick = {
                         navController.currentBackStackEntry?.savedStateHandle?.set("article", featured)
                         navController.navigate("article")
@@ -125,6 +126,7 @@ fun HomeScreen(navController: NavController) {
                 date = article.date,
                 views = article.views,
                 imageUrl = article.imageUrl,
+                topic = article.topic,
                 onClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
                     navController.navigate("article")
@@ -138,7 +140,7 @@ fun HomeScreen(navController: NavController) {
 fun SectionHeader(
     title: String,
     onViewAllClick: () -> Unit = {},
-    viewAllColor: Color = Color(0xFF1E88E5)
+    viewAllColor: Color = Color(0xFFFFA726)
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
