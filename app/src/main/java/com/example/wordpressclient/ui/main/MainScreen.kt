@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +13,7 @@ import com.example.wordpressclient.ui.profile.EditProfileScreen
 import com.example.wordpressclient.ui.profile.MyProfileScreen
 import com.example.wordpressclient.ui.article.ArticleScreen
 import com.example.wordpressclient.data.Article
+import com.example.wordpressclient.ui.discover.Discover
 
 @Composable
 fun MainScreen(onLogoutClick: () -> Unit) {
@@ -29,7 +29,9 @@ fun MainScreen(onLogoutClick: () -> Unit) {
             composable(BottomNavItem.Home.route) {
                 HomeScreen(navController)
             }
-            composable(BottomNavItem.Discover.route) { DummyScreen("Discover Screen") }
+            composable(BottomNavItem.Discover.route) {
+                Discover()
+            }
             composable(BottomNavItem.Notifications.route) { Alert() }
             composable(route = BottomNavItem.Profile.route) {
                 MyProfileScreen(
@@ -59,5 +61,5 @@ fun MainScreen(onLogoutClick: () -> Unit) {
 
 @Composable
 fun DummyScreen(name: String) {
-    androidx.compose.material3.Text(text = name, modifier = Modifier.padding(24.dp))
+    androidx.compose.material3.Text(text = name)
 }

@@ -1,14 +1,12 @@
 package com.example.wordpressclient.ui.main
-import androidx.compose.foundation.layout.size
+
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -24,34 +22,27 @@ fun BottomNavigationBar(navController: NavHostController) {
         val currentDestination = navBackStackEntry?.destination
 
         items.forEach { item ->
-            val selected = currentDestination?.hierarchy?.any { it.route == item.route } == true
+            val selected = currentDestination?.route == item.route
 
             NavigationBarItem(
                 selected = selected,
                 onClick = {
                     navController.navigate(item.route) {
-                        //Always bring to home
-                        popUpTo(0) { inclusive = false }
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
                         launchSingleTop = true
                         restoreState = true
                     }
                 },
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.label,
-                        tint = if (selected) Color(0xFFFF9800) else Color.Gray,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .then(if (selected) Modifier.scale(1.2f) else Modifier)
-                    )
-                },
-                label = {
-                    Text(
-                        text = item.label,
-                        color = if (selected) Color(0xFFFF9800) else Color.Gray
-                    )
-                }
+                icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
+                label = { Text(text = item.label) },
+                alwaysShowLabel = true,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color(0xFFFFA726),
+                    selectedTextColor = Color(0xFFFFA726),
+                    indicatorColor = Color.White
+                )
             )
         }
     }
