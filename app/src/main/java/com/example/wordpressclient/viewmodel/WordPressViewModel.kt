@@ -95,7 +95,8 @@ class WordPressViewModel : ViewModel() {
             date = formattedDate,
             views = "${(1000..10000).random()} views", // Random view count for demo
             imageUrl = imageUrl,
-            content = cleanContent.take(500) + if (cleanContent.length > 500) "..." else ""
+            content = cleanContent.take(500) + if (cleanContent.length > 500) "..." else "",
+            topic = "WordPress" // Default topic
         )
     }
 }

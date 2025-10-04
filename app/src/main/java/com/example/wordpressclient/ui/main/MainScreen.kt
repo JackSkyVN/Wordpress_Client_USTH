@@ -42,6 +42,7 @@ fun MainScreen(onLogoutClick: () -> Unit) {
             }
             composable("edit_profile") {
                 EditProfileScreen(
+                    profile = com.example.wordpressclient.ui.profile.ProfileState(),
                     onBack = { navController.popBackStack() },
                     onSave = { navController.popBackStack() }
                 )
