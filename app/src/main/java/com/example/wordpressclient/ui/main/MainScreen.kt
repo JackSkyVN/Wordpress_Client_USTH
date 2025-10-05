@@ -30,7 +30,7 @@ fun MainScreen(onLogoutClick: () -> Unit) {
                 HomeScreen(navController)
             }
             composable(BottomNavItem.Discover.route) {
-                Discover()
+                Discover(navController)
             }
             composable(BottomNavItem.Notifications.route) { Alert() }
             composable(route = BottomNavItem.Profile.route) {

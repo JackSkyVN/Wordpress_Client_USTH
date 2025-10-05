@@ -128,4 +128,105 @@ class WordPressRepository {
             Result.failure(e)
         }
     }
+    
+    // ===== ENHANCED SEARCH AND DISCOVERY METHODS =====
+    
+    suspend fun searchPosts(
+        searchQuery: String,
+        perPage: Int = 20,
+        page: Int = 1
+    ): Result<List<WpPost>> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.searchPosts(searchQuery, perPage, page)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Failed to search posts: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun getPostsByCategory(
+        categoryId: Int,
+        perPage: Int = 20,
+        page: Int = 1
+    ): Result<List<WpPost>> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getPostsByCategory(categoryId, perPage, page)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Failed to fetch posts by category: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun getPostsByTag(
+        tagId: Int,
+        perPage: Int = 20,
+        page: Int = 1
+    ): Result<List<WpPost>> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getPostsByTag(tagId, perPage, page)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Failed to fetch posts by tag: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun getTrendingPosts(
+        perPage: Int = 10,
+        page: Int = 1
+    ): Result<List<WpPost>> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getTrendingPosts(perPage, page)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Failed to fetch trending posts: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun getTags(
+        perPage: Int = 20,
+        page: Int = 1,
+        search: String? = null
+    ): Result<List<WpTag>> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getTags(perPage, page, search)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Failed to fetch tags: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun getTag(id: Int): Result<WpTag> = withContext(Dispatchers.IO) {
+        try {
+            val response = api.getTag(id)
+            if (response.isSuccessful) {
+                response.body()?.let { tag ->
+                    Result.success(tag)
+                } ?: Result.failure(Exception("Tag not found"))
+            } else {
+                Result.failure(Exception("Failed to fetch tag: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

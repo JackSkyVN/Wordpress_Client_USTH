@@ -48,4 +48,53 @@ interface WordPressApiService {
     
     @GET("media/{id}")
     suspend fun getMediaById(@Path("id") id: Int): Response<WpMedia>
+    
+    // ===== ENHANCED SEARCH AND DISCOVERY ENDPOINTS =====
+    
+    @GET("posts")
+    suspend fun searchPosts(
+        @Query("search") search: String,
+        @Query("per_page") perPage: Int = 20,
+        @Query("page") page: Int = 1,
+        @Query("orderby") orderBy: String = "relevance",
+        @Query("order") order: String = "desc"
+    ): Response<List<WpPost>>
+    
+    @GET("posts")
+    suspend fun getPostsByCategory(
+        @Query("categories") categoryId: Int,
+        @Query("per_page") perPage: Int = 20,
+        @Query("page") page: Int = 1,
+        @Query("orderby") orderBy: String = "date",
+        @Query("order") order: String = "desc"
+    ): Response<List<WpPost>>
+    
+    @GET("posts")
+    suspend fun getPostsByTag(
+        @Query("tags") tagId: Int,
+        @Query("per_page") perPage: Int = 20,
+        @Query("page") page: Int = 1,
+        @Query("orderby") orderBy: String = "date",
+        @Query("order") order: String = "desc"
+    ): Response<List<WpPost>>
+    
+    @GET("posts")
+    suspend fun getTrendingPosts(
+        @Query("per_page") perPage: Int = 10,
+        @Query("page") page: Int = 1,
+        @Query("orderby") orderBy: String = "date",
+        @Query("order") order: String = "desc"
+    ): Response<List<WpPost>>
+    
+    @GET("tags")
+    suspend fun getTags(
+        @Query("per_page") perPage: Int = 20,
+        @Query("page") page: Int = 1,
+        @Query("search") search: String? = null,
+        @Query("orderby") orderBy: String = "count",
+        @Query("order") order: String = "desc"
+    ): Response<List<WpTag>>
+    
+    @GET("tags/{id}")
+    suspend fun getTag(@Path("id") id: Int): Response<WpTag>
 }

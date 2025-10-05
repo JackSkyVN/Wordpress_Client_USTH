@@ -20,9 +20,9 @@ import com.example.wordpressclient.R
 
 // ✅ dữ liệu người dùng
 data class ProfileState(
-    var name: String = "Charlotte King",
-    var email: String = "johnkinggraphics@gmail.com",
-    var username: String = "@johnkinggraphics",
+    var name: String = "Duong Duc",
+    var email: String = "duongduc123@gmail.com",
+    var username: String = "@duc123",
     var password: String = "123456",
     var phone: String = "6989532"
 )
