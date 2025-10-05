@@ -368,10 +368,10 @@ fun PopularTagsSection(
             modifier = Modifier.padding(bottom = 12.dp)
         )
         
-        LazyColumn(
+        Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(tags.take(10)) { tag ->
+            tags.take(10).forEach { tag ->
                 TagCard(
                     tag = tag,
                     onClick = { onTagClick(tag) }
@@ -426,10 +426,10 @@ fun TrendingArticlesSection(
             modifier = Modifier.padding(bottom = 12.dp)
         )
         
-        LazyColumn(
+        Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(articles) { article ->
+            articles.forEach { article ->
                 TrendingArticleCard(
                     article = article,
                     onClick = { onArticleClick(article) }
