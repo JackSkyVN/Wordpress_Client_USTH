@@ -100,10 +100,11 @@ fun Discover(navController: NavController? = null) {
             items(uiState.searchResults) { article ->
                 SearchResultCard(
                     article = article,
-                    onClick = { 
-                        navController?.navigate("article") {
-                            // Pass article data through saved state
-                        }
+                    onClick = {
+                        navController?.currentBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("article", article)
+                        navController?.navigate("article")
                     }
                 )
             }
@@ -136,9 +137,10 @@ fun Discover(navController: NavController? = null) {
                     TrendingArticlesSection(
                         articles = uiState.trendingPosts,
                         onArticleClick = { article ->
-                            navController?.navigate("article") {
-                                // Pass article data through saved state
-                            }
+                            navController?.currentBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("article", article)
+                            navController?.navigate("article")
                         }
                     )
                 }
