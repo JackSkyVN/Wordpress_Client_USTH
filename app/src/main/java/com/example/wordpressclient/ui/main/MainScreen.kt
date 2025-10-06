@@ -32,7 +32,7 @@ fun MainScreen(onLogoutClick: () -> Unit) {
             composable(BottomNavItem.Discover.route) {
                 Discover(navController)
             }
-            composable(BottomNavItem.Notifications.route) { Alert() }
+            composable(BottomNavItem.Notifications.route) { Alert(navController) }
             composable(route = BottomNavItem.Profile.route) {
                 MyProfileScreen(
                     onEditClick = {
