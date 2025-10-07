@@ -20,6 +20,9 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wordpressclient.data.Article
 import com.example.wordpressclient.viewmodel.WordPressViewModel
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -37,9 +40,15 @@ fun HomeScreen(navController: NavController) {
     ) {
         // Search + Notification
         item {
+            var query by remember { mutableStateOf("") }
             TopBar(
+                query = query,
+                onQueryChanged = { q ->
+                    query = q
+                },
                 modifier = Modifier.padding(top = 4.dp),
-                onRefreshClick = { viewModel.refreshPosts() }
+                onRefreshClick = { viewModel.refreshPosts() },
+                onSearchClick = { if (query.isBlank()) viewModel.refreshPosts() else viewModel.searchPosts(query) }
             )
         }
 
@@ -171,6 +180,7 @@ fun TopBar(
     query: String = "",
     onQueryChanged: (String) -> Unit = {},
     onRefreshClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -193,6 +203,8 @@ fun TopBar(
                     modifier = Modifier.size(20.dp)
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { onSearchClick() }),
             modifier = Modifier
                 .weight(1f)
                 .height(56.dp),
@@ -208,10 +220,10 @@ fun TopBar(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        IconButton(onClick = onRefreshClick) {
+        IconButton(onClick = onSearchClick) {
             Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = "Refresh"
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search"
             )
         }
 

@@ -1,6 +1,6 @@
 package com.example.wordpressclient.ui.home
 
-import androidx.compose.foundation.Image
+import coil.compose.SubcomposeAsyncImage
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,16 +32,28 @@ fun SuggestedItem(
             .height(100.dp)
             .padding(vertical = 4.dp)
     ) {
-        // Ảnh bo góc + bấm được
-        Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+        // Image with fallback
+        SubcomposeAsyncImage(
+            model = imageUrl,
             contentDescription = title,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(100.dp)
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onClick() },
-            contentScale = ContentScale.Crop
+            loading = {},
+            error = {
+                SubcomposeAsyncImage(
+                    model = "https://picsum.photos/400/300?random=${title.hashCode()}",
+                    contentDescription = title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(8.dp))
+                )
+            }
         )
 
         Spacer(modifier = Modifier.width(12.dp))

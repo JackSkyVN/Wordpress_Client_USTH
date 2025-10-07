@@ -66,6 +66,41 @@ class WordPressViewModel : ViewModel() {
         loadPosts()
     }
     
+    fun searchPosts(query: String) {
+        if (query.isBlank()) {
+            loadPosts()
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            try {
+                val result = repository.searchPosts(searchQuery = query, perPage = 20, page = 1)
+                result.fold(
+                    onSuccess = { wpPosts ->
+                        val articles = wpPosts.map { convertWpPostToArticle(it) }
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            posts = articles,
+                            featuredPost = articles.firstOrNull(),
+                            error = null
+                        )
+                    },
+                    onFailure = { exception ->
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = exception.message ?: "Unknown error occurred"
+                        )
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "Unknown error occurred"
+                )
+            }
+        }
+    }
+
     private fun convertWpPostToArticle(wpPost: WpPost): Article {
         // Extract clean text from HTML content
         val cleanContent = wpPost.content.rendered

@@ -1,6 +1,6 @@
 package com.example.wordpressclient.ui.home
 
-import androidx.compose.foundation.Image
+import coil.compose.SubcomposeAsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -35,12 +35,21 @@ fun FeaturedCard(
             .clip(RoundedCornerShape(16.dp))
             .clickable { onClick() }
     ) {
-        // Ảnh nền
-        Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+        // Background image with fallback
+        SubcomposeAsyncImage(
+            model = imageUrl,
             contentDescription = title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
+            modifier = Modifier.matchParentSize(),
+            loading = {},
+            error = {
+                SubcomposeAsyncImage(
+                    model = "https://picsum.photos/800/600?random=${title.hashCode()}",
+                    contentDescription = title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+            }
         )
 
         // Gradient mờ từ dưới lên

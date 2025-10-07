@@ -43,7 +43,7 @@ fun Discover(navController: NavController? = null) {
                 text = "Discover",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = Color(0xFFFFA726),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -166,7 +166,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Menu,
                 contentDescription = "Filter",
-                tint = Color(0xFF1E88E5)
+                tint = Color(0xFFFFA726)
             )
         }
 
@@ -178,9 +178,9 @@ fun SearchBar(
             modifier = Modifier.weight(1f),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF1E88E5),
+                focusedBorderColor = Color(0xFFFFA726),
                 unfocusedBorderColor = Color.Gray,
-                cursorColor = Color(0xFF1E88E5)
+                cursorColor = Color(0xFFFFA726)
             ),
             trailingIcon = {
                 if (query.isNotEmpty()) {
@@ -200,7 +200,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search",
-                tint = Color(0xFF1E88E5)
+                tint = Color(0xFFFFA726)
             )
         }
     }
@@ -235,7 +235,7 @@ fun ErrorCard(
             )
             Button(
                 onClick = onRetryClick,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA726))
             ) {
                 Text("Retry", color = Color.White)
             }
@@ -347,8 +347,11 @@ fun FilterBox(
         modifier = modifier.height(40.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (isSelected) Color(0xFF1E88E5) else Color.White,
-            contentColor = if (isSelected) Color.White else Color.Black
+            containerColor = if (isSelected) Color(0xFFFFA726) else Color.White,
+            contentColor = if (isSelected) Color.White else Color(0xFFFFA726)
+        ),
+        border = ButtonDefaults.outlinedButtonBorder.copy(
+            brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFFFA726))
         )
     ) {
         Text(text = text, fontSize = 14.sp)
@@ -366,7 +369,7 @@ fun PopularTagsSection(
             text = "🏷️ Popular Tags",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = Color(0xFFFFA726),
             modifier = Modifier.padding(bottom = 12.dp)
         )
         
@@ -388,9 +391,9 @@ fun TagCard(
     tag: com.example.wordpressclient.data.model.WpTag,
     onClick: () -> Unit
 ) {
-    Surface(
+        Surface(
         onClick = onClick,
-        color = Color(0xFF1E88E5).copy(alpha = 0.15f),
+            color = Color(0xFFFFA726).copy(alpha = 0.15f),
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.padding(horizontal = 4.dp)
     ) {
@@ -400,7 +403,7 @@ fun TagCard(
         ) {
             Text(
                 text = "#${tag.name}",
-                color = Color(0xFF1E88E5),
+                color = Color(0xFFFFA726),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -424,7 +427,7 @@ fun TrendingArticlesSection(
             text = "🔥 Trending Articles",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = Color(0xFFFFA726),
             modifier = Modifier.padding(bottom = 12.dp)
         )
         

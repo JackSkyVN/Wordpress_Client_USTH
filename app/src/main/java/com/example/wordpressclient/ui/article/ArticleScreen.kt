@@ -3,7 +3,7 @@ package com.example.wordpressclient.ui.article
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
+import coil.compose.SubcomposeAsyncImage
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,14 +76,26 @@ fun ArticleScreen(
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
             // Ảnh nền cố định
-            Image(
-                painter = rememberAsyncImagePainter(article.imageUrl),
+            SubcomposeAsyncImage(
+                model = article.imageUrl,
                 contentDescription = article.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(280.dp)
-                    .align(Alignment.TopCenter)
+                    .align(Alignment.TopCenter),
+                loading = {},
+                error = {
+                    SubcomposeAsyncImage(
+                        model = "https://picsum.photos/800/600?random=${article.title.hashCode()}",
+                        contentDescription = article.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(280.dp)
+                            .align(Alignment.TopCenter)
+                    )
+                }
             )
 
             // Nội dung cuộn
