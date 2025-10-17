@@ -9,7 +9,7 @@ data class Article(
     val views: String,
     val imageUrl: String,
     val content: String,
-    val topic: String // 👈 thêm topic
+    val topic: String
 ) : Serializable
 
 val sampleArticles = listOf(

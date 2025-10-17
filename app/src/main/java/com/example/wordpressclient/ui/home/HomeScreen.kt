@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Refresh
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wordpressclient.data.Article
@@ -26,11 +25,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    // Get the ViewModel to manage data and UI state
     val viewModel: WordPressViewModel = viewModel()
+
+    // When the data in the ViewModel changes, the UI will automatically update.
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(), // Full screen
         contentPadding = PaddingValues(
             start = 16.dp,
             end = 16.dp,
@@ -38,33 +40,35 @@ fun HomeScreen(navController: NavController) {
         ),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // Search + Notification
+        // Search bar + Nofitication icon
         item {
-            var query by remember { mutableStateOf("") }
+            var query by remember { mutableStateOf("") } // Remember Variable
+
             TopBar(
                 query = query,
-                onQueryChanged = { q ->
-                    query = q
-                },
+                onQueryChanged = { q -> query = q }, // Update when user insert text
                 modifier = Modifier.padding(top = 4.dp),
                 onRefreshClick = { viewModel.refreshPosts() },
-                onSearchClick = { if (query.isBlank()) viewModel.refreshPosts() else viewModel.searchPosts(query) }
+                onSearchClick = {
+                    if (query.isBlank()) viewModel.refreshPosts() // If blank -> Reload
+                    else viewModel.searchPosts(query) // Call Search Function in ViewModel
+                }
             )
         }
 
-        // Loading state
+        // Loading
         if (uiState.isLoading) {
             item {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator() // Loading circle
                 }
             }
         }
 
-        // Error state
+        // Error Status
         if (uiState.error != null) {
             item {
                 Card(
@@ -75,12 +79,14 @@ fun HomeScreen(navController: NavController) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // Error text
                         Text(
                             text = "Error loading posts",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color(0xFFD32F2F)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
+                        // Show error
                         Text(
                             text = uiState.error ?: "Unknown error",
                             style = MaterialTheme.typography.bodyMedium,
@@ -94,17 +100,16 @@ fun HomeScreen(navController: NavController) {
                 }
             }
         }
-
-        // Breaking News Section title
+        // Breaking News text
         item {
             SectionHeader(
                 title = "Breaking News",
-                onViewAllClick = { }
+                onViewAllClick = {}
             )
             Spacer(modifier = Modifier.height(4.dp))
         }
 
-        // Featured Article
+        // Featured Post
         uiState.featuredPost?.let { featured ->
             item {
                 FeaturedCard(
@@ -113,22 +118,24 @@ fun HomeScreen(navController: NavController) {
                     imageUrl = featured.imageUrl,
                     topic = featured.topic,
                     onClick = {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("article", featured)
+                        navController.currentBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("article", featured)
                         navController.navigate("article")
                     }
                 )
             }
         }
 
-        // Recommendation Section title
+        // Recommendation text
         item {
             SectionHeader(
                 title = "Recommendation",
-                onViewAllClick = { }
+                onViewAllClick = {}
             )
         }
 
-        // Suggested articles list
+        // Suggested list
         items(uiState.posts.drop(1)) { article: Article ->
             SuggestedItem(
                 title = article.title,
@@ -137,7 +144,9 @@ fun HomeScreen(navController: NavController) {
                 imageUrl = article.imageUrl,
                 topic = article.topic,
                 onClick = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("article", article)
                     navController.navigate("article")
                 }
             )
@@ -151,6 +160,7 @@ fun SectionHeader(
     onViewAllClick: () -> Unit = {},
     viewAllColor: Color = Color(0xFFFFA726)
 ) {
+    // Row (Header + ViewAll)
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -163,8 +173,7 @@ fun SectionHeader(
             fontSize = 22.sp
         )
 
-        Spacer(modifier = Modifier.weight(1f))
-
+        Spacer(modifier = Modifier.weight(1f)) // Make ViewALl to the right
         TextButton(onClick = onViewAllClick) {
             Text(
                 text = "View all",
@@ -178,17 +187,19 @@ fun SectionHeader(
 @Composable
 fun TopBar(
     query: String = "",
-    onQueryChanged: (String) -> Unit = {},
+    onQueryChanged: (String) -> Unit = {}, // Text change -> Call
     onRefreshClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    // Row (Search + Others)
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Search (TextField)
         TextField(
             value = query,
             onValueChange = onQueryChanged,
@@ -203,7 +214,7 @@ fun TopBar(
                     modifier = Modifier.size(20.dp)
                 )
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search), // Touch "Enter" -> Search
             keyboardActions = KeyboardActions(onSearch = { onSearchClick() }),
             modifier = Modifier
                 .weight(1f)
@@ -220,6 +231,7 @@ fun TopBar(
 
         Spacer(modifier = Modifier.width(8.dp))
 
+        // Icon search
         IconButton(onClick = onSearchClick) {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -227,12 +239,13 @@ fun TopBar(
             )
         }
 
+        // Notifications
         BadgedBox(
             badge = {
                 Badge { Text("1") }
             }
         ) {
-            IconButton(onClick = { /* TODO */ }) {
+            IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.Default.Notifications,
                     contentDescription = "Notifications"

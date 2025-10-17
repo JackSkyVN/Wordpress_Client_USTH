@@ -26,23 +26,24 @@ fun FeaturedCard(
     author: String,
     imageUrl: String,
     topic: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {} // Callback function
 ) {
+    // Box similar to FrameLayout
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(240.dp)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { onClick() }
+            .clickable { onClick() } // Click event
     ) {
-        // Background image with fallback
+        // Background image
         SubcomposeAsyncImage(
             model = imageUrl,
             contentDescription = title,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.matchParentSize(), // Img take full box's space
             loading = {},
-            error = {
+            error = {                      // If error, show random img
                 SubcomposeAsyncImage(
                     model = "https://picsum.photos/800/600?random=${title.hashCode()}",
                     contentDescription = title,
@@ -52,44 +53,45 @@ fun FeaturedCard(
             }
         )
 
-        // Gradient mờ từ dưới lên
+        // Gradient layer
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.7f)
+                            Color.Transparent,              // Transparent top
+                            Color.Black.copy(alpha = 0.7f) // Blur black
                         ),
-                        startY = 100f
+                        startY = 100f // StartPoint
                     )
                 )
         )
 
-        // 👇 Topic chip ở góc trên trái
+        // Topic tag
         Surface(
             shape = RoundedCornerShape(50),
-            color = Color(0xFFFFA726), // 👈 màu nền cam
+            color = Color(0xFFFFA726),
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(12.dp)
         ) {
             Text(
                 text = topic,
-                color = Color.White, // chữ trắng nổi bật
+                color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
             )
         }
 
-        // Text đè lên ảnh
+        // Title + Author
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(16.dp)
         ) {
+            // Title
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium.copy(
@@ -98,13 +100,13 @@ fun FeaturedCard(
                     color = Color.White
                 )
             )
-
             Spacer(modifier = Modifier.height(4.dp))
 
+            // Author
             Text(
                 text = "By $author",
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = Color.White.copy(alpha = 0.9f) // Blur white
                 )
             )
         }

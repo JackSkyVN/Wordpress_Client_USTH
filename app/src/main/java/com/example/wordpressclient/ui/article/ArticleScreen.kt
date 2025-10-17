@@ -33,25 +33,29 @@ import com.example.wordpressclient.data.Article
 fun ArticleScreen(
     navController: NavController,
     article: Article,
-    topBarTriggerOffset: Dp = 130.dp // ngưỡng hiển thị AppBar
+    topBarTriggerOffset: Dp = 130.dp // When AppBar appear?
 ) {
     val scrollState = rememberScrollState()
 
-    // Convert dp sang px để so sánh với scrollState.value
+    // dp -> px to compare scrollState.value
     val thresholdPx = with(LocalDensity.current) { topBarTriggerOffset.toPx() }
     val showAppBar = remember {
         derivedStateOf { scrollState.value >= thresholdPx }
     }
 
+    // TopBar + Content
     Scaffold(
         topBar = {
+            // Fade effect
             AnimatedVisibility(
-                visible = showAppBar.value,
+                visible = showAppBar.value, // Only show when reach 130dp
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
+                // AppBar
                 TopAppBar(
                     title = {
+                        // Title on AppBar
                         Text(
                             text = article.title,
                             maxLines = 1,
@@ -61,8 +65,12 @@ fun ArticleScreen(
                         )
                     },
                     navigationIcon = {
+                        // Back button
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -75,9 +83,10 @@ fun ArticleScreen(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
-            // Ảnh nền cố định
+
+            // Big image
             SubcomposeAsyncImage(
-                model = article.imageUrl,
+                model = article.imageUrl, // URL
                 contentDescription = article.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -86,6 +95,7 @@ fun ArticleScreen(
                     .align(Alignment.TopCenter),
                 loading = {},
                 error = {
+                    // If error -> show random img
                     SubcomposeAsyncImage(
                         model = "https://picsum.photos/800/600?random=${article.title.hashCode()}",
                         contentDescription = article.title,
@@ -98,13 +108,17 @@ fun ArticleScreen(
                 }
             )
 
-            // Nội dung cuộn
+            // Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(top = 220.dp, bottom = paddingValues.calculateBottomPadding())
+                    .verticalScroll(scrollState) // Allow Scroll
+                    .padding(
+                        top = 220.dp, // Make content under Image
+                        bottom = paddingValues.calculateBottomPadding()
+                    )
             ) {
+                // Space for content
                 Surface(
                     shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                     color = Color.White,
@@ -116,6 +130,7 @@ fun ArticleScreen(
                             .fillMaxSize()
                             .padding(16.dp)
                     ) {
+                        // Title Article
                         Text(
                             text = article.title,
                             style = MaterialTheme.typography.titleLarge.copy(
@@ -126,6 +141,7 @@ fun ArticleScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
+                        // Author + Date + View
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "By ${article.author}",
@@ -145,6 +161,7 @@ fun ArticleScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
+                        // Article Content
                         Text(
                             text = article.content,
                             style = MaterialTheme.typography.bodyLarge.copy(
@@ -156,19 +173,19 @@ fun ArticleScreen(
                 }
             }
 
-            // Nút back nổi trên ảnh khi AppBar chưa hiện
+            // Back Button
             if (!showAppBar.value) {
                 IconButton(
                     onClick = { navController.popBackStack() },
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopStart)
-                        .zIndex(10f) // đảm bảo luôn nằm trên cùng
+                        .zIndex(10f)
                 ) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.White // trắng để nổi trên ảnh
+                        tint = Color.White
                     )
                 }
             }
